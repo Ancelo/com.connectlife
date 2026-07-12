@@ -1,0 +1,129 @@
+{
+  "id": "com.connectlife.unofficial",
+  "version": "0.1.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": ["local"],
+  "name": { "en": "ConnectLife (Unofficial)", "it": "ConnectLife (Non ufficiale)" },
+  "description": {
+    "en": "Control ConnectLife cloud air conditioners (Hisense, Gorenje, ASKO, ATAG, ETNA) from Homey: power, target temperature, mode, fan speed and swing. Unofficial, community-built integration — not affiliated with, authorised or endorsed by ConnectLife or Hisense.",
+    "it": "Controlla i climatizzatori ConnectLife (Hisense, Gorenje, ASKO, ATAG, ETNA) da Homey: accensione, temperatura, modalità, velocità ventola e oscillazione. Integrazione non ufficiale sviluppata dalla community — non affiliata, autorizzata o approvata da ConnectLife o Hisense."
+  },
+  "category": ["climate"],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": { "name": "Ancelo", "email": "ilsovversivo@gmail.com" },
+  "contributors": {
+    "developers": [
+      { "name": "oyvindwe (ConnectLife Python library, GPLv3)" },
+      { "name": "bilan (connectlife-api-connector)" }
+    ]
+  },
+  "homepage": "https://github.com/Ancelo/com.connectlife",
+  "source": "https://github.com/Ancelo/com.connectlife",
+  "support": "https://github.com/Ancelo/com.connectlife/issues",
+  "bugs": { "url": "https://github.com/Ancelo/com.connectlife/issues" },
+  "license": "GPL-3.0-or-later",
+  "brandColor": "#00833E",
+  "tags": { "en": ["connectlife", "hisense", "gorenje", "air conditioner", "ac", "climate"] },
+  "capabilities": {
+    "ac_mode": {
+      "type": "enum",
+      "title": { "en": "Mode", "it": "Modalità" },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "icon": "/assets/ac_mode.svg",
+      "values": [
+        { "id": "cool", "title": { "en": "Cool", "it": "Raffreddamento" } },
+        { "id": "heat", "title": { "en": "Heat", "it": "Riscaldamento" } },
+        { "id": "dry", "title": { "en": "Dry", "it": "Deumidificazione" } },
+        { "id": "fan_only", "title": { "en": "Fan only", "it": "Solo ventola" } },
+        { "id": "auto", "title": { "en": "Auto", "it": "Automatico" } }
+      ]
+    },
+    "fan_mode": {
+      "type": "enum",
+      "title": { "en": "Fan speed", "it": "Velocità ventola" },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "icon": "/assets/fan_mode.svg",
+      "values": [
+        { "id": "auto", "title": { "en": "Auto", "it": "Automatica" } },
+        { "id": "low", "title": { "en": "Low", "it": "Bassa" } },
+        { "id": "mid_low", "title": { "en": "Medium-low", "it": "Medio-bassa" } },
+        { "id": "medium", "title": { "en": "Medium", "it": "Media" } },
+        { "id": "mid_high", "title": { "en": "Medium-high", "it": "Medio-alta" } },
+        { "id": "high", "title": { "en": "High", "it": "Alta" } }
+      ]
+    },
+    "swing_vertical": {
+      "type": "boolean",
+      "title": { "en": "Vertical swing", "it": "Oscillazione verticale" },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "icon": "/assets/swing_mode.svg"
+    }
+  },
+  "drivers": [
+    {
+      "id": "ac",
+      "name": { "en": "ConnectLife Air Conditioner", "it": "Climatizzatore ConnectLife" },
+      "class": "thermostat",
+      "images": {
+        "small": "/drivers/ac/assets/images/small.png",
+        "large": "/drivers/ac/assets/images/large.png",
+        "xlarge": "/drivers/ac/assets/images/xlarge.png"
+      },
+      "capabilities": [
+        "onoff",
+        "target_temperature",
+        "measure_temperature",
+        "ac_mode",
+        "fan_mode",
+        "swing_vertical"
+      ],
+      "capabilitiesOptions": {
+        "target_temperature": { "min": 16, "max": 32, "step": 1 }
+      },
+      "platforms": ["local"],
+      "connectivity": ["cloud"],
+      "pair": [
+        { "id": "login" },
+        { "id": "list_devices", "template": "list_devices", "navigation": { "next": "add_devices" } },
+        { "id": "add_devices", "template": "add_devices" }
+      ],
+      "settings": [
+        {
+          "id": "poll_interval",
+          "type": "number",
+          "label": { "en": "Background refresh (minutes, 0 = off)", "it": "Aggiornamento in background (minuti, 0 = disattivato)" },
+          "hint": {
+            "en": "ConnectLife dislikes frequent polling. Leave at 0 for event-driven updates. If you set a value, keep it high (5 minutes or more).",
+            "it": "ConnectLife mal tollera i poll frequenti. Lascia 0 per aggiornamenti solo dopo i comandi. Se imposti un valore, tienilo alto (5 minuti o più)."
+          },
+          "value": 0,
+          "min": 0,
+          "max": 1440
+        }
+      ]
+    }
+  ],
+  "flow": {
+    "actions": [
+      {
+        "id": "refresh_status",
+        "title": { "en": "Refresh status from cloud", "it": "Aggiorna stato dal cloud" },
+        "args": [
+          { "name": "device", "type": "device", "filter": "driver_id=ac" }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+<style>
+  .cl-pair { padding: 20px; max-width: 420px; margin: 0 auto; font-family: -apple-system, system-ui, sans-serif; }
+  .cl-pair h2 { margin: 0 0 6px; }
+  .cl-pair p { color: #666; margin: 0 0 18px; font-size: 14px; }
+  .cl-pair label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 4px; }
+  .cl-pair input { width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; }
+  .cl-pair button { margin-top: 20px; width: 100%; padding: 12px; border: 0; border-radius: 8px; background: #00833E; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; }
+  .cl-pair button:disabled { opacity: 0.6; cursor: default; }
+</style>
+
+<div class="cl-pair">
+  <h2>ConnectLife account</h2>
+  <p>Use the same username and password as the ConnectLife app.</p>
+
+  <label for="username">Username</label>
+  <input id="username" type="text" autocapitalize="none" autocorrect="off" spellcheck="false" />
+
+  <label for="password">Password</label>
+  <input id="password" type="password" />
+
+  <button id="submit" type="button" onclick="doLogin()">Log in</button>
+</div>
+
+<script type="text/javascript">
+  function doLogin() {
+    var btn = document.getElementById('submit');
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+    if (!username || !password) {
+      Homey.alert('Please enter your username and password.');
+      return;
+    }
+    btn.disabled = true;
+    Homey.emit('login', { username: username, password: password })
+      .then(function () {
+        Homey.showView('list_devices');
+      })
+      .catch(function (err) {
+        btn.disabled = false;
+        Homey.alert(typeof err === 'string' ? err : (err && err.message) || 'Login failed');
+      });
+  }
+
+  document.getElementById('password').addEventListener('keyup', function (e) {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  Homey.ready();
+</script>
