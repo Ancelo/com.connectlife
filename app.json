@@ -4,10 +4,10 @@
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": ["local"],
-  "name": { "en": "ConnectLife (Unofficial)", "it": "ConnectLife (Non ufficiale)" },
+  "name": { "en": "ConnectLife", "it": "ConnectLife" },
   "description": {
-    "en": "Control ConnectLife cloud air conditioners (Hisense, Gorenje, ASKO, ATAG, ETNA) from Homey: power, target temperature, mode, fan speed and swing. Unofficial, community-built integration — not affiliated with, authorised or endorsed by ConnectLife or Hisense.",
-    "it": "Controlla i climatizzatori ConnectLife (Hisense, Gorenje, ASKO, ATAG, ETNA) da Homey: accensione, temperatura, modalità, velocità ventola e oscillazione. Integrazione non ufficiale sviluppata dalla community — non affiliata, autorizzata o approvata da ConnectLife o Hisense."
+    "en": "Your ideal indoor climate, automated",
+    "it": "Il clima ideale in casa, automatizzato"
   },
   "category": ["climate"],
   "permissions": [],
