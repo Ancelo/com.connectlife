@@ -116,12 +116,140 @@
     }
   ],
   "flow": {
+    "triggers": [
+      {
+        "id": "ac_mode_changed",
+        "title": { "en": "The mode changed", "it": "La modalità è cambiata" },
+        "tokens": [
+          { "name": "mode", "type": "string", "title": { "en": "Mode", "it": "Modalità" }, "example": "cool" }
+        ]
+      },
+      {
+        "id": "fan_mode_changed",
+        "title": { "en": "The fan speed changed", "it": "La velocità ventola è cambiata" },
+        "tokens": [
+          { "name": "fan_speed", "type": "string", "title": { "en": "Fan speed", "it": "Velocità ventola" }, "example": "medium" }
+        ]
+      },
+      {
+        "id": "swing_turned_on",
+        "title": { "en": "Vertical swing turned on", "it": "Oscillazione verticale attivata" }
+      },
+      {
+        "id": "swing_turned_off",
+        "title": { "en": "Vertical swing turned off", "it": "Oscillazione verticale disattivata" }
+      }
+    ],
+    "conditions": [
+      {
+        "id": "ac_mode_is",
+        "title": { "en": "Mode is", "it": "La modalità è" },
+        "titleFormatted": { "en": "Mode is !{{|not}} [[mode]]", "it": "La modalità !{{è|non è}} [[mode]]" },
+        "args": [
+          { "name": "device", "type": "device", "filter": "driver_id=ac" },
+          {
+            "name": "mode",
+            "type": "dropdown",
+            "values": [
+              { "id": "cool", "title": { "en": "Cool", "it": "Raffreddamento" } },
+              { "id": "heat", "title": { "en": "Heat", "it": "Riscaldamento" } },
+              { "id": "dry", "title": { "en": "Dry", "it": "Deumidificazione" } },
+              { "id": "fan_only", "title": { "en": "Fan only", "it": "Solo ventola" } },
+              { "id": "auto", "title": { "en": "Auto", "it": "Automatico" } }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "fan_mode_is",
+        "title": { "en": "Fan speed is", "it": "La velocità ventola è" },
+        "titleFormatted": { "en": "Fan speed is !{{|not}} [[fan]]", "it": "La velocità ventola !{{è|non è}} [[fan]]" },
+        "args": [
+          { "name": "device", "type": "device", "filter": "driver_id=ac" },
+          {
+            "name": "fan",
+            "type": "dropdown",
+            "values": [
+              { "id": "auto", "title": { "en": "Auto", "it": "Automatica" } },
+              { "id": "low", "title": { "en": "Low", "it": "Bassa" } },
+              { "id": "mid_low", "title": { "en": "Medium-low", "it": "Medio-bassa" } },
+              { "id": "medium", "title": { "en": "Medium", "it": "Media" } },
+              { "id": "mid_high", "title": { "en": "Medium-high", "it": "Medio-alta" } },
+              { "id": "high", "title": { "en": "High", "it": "Alta" } }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "swing_is_on",
+        "title": { "en": "Vertical swing is on", "it": "L'oscillazione verticale è attiva" },
+        "titleFormatted": { "en": "Vertical swing is !{{on|off}}", "it": "L'oscillazione verticale è !{{attiva|spenta}}" },
+        "args": [
+          { "name": "device", "type": "device", "filter": "driver_id=ac" }
+        ]
+      }
+    ],
     "actions": [
       {
         "id": "refresh_status",
         "title": { "en": "Refresh status from cloud", "it": "Aggiorna stato dal cloud" },
         "args": [
           { "name": "device", "type": "device", "filter": "driver_id=ac" }
+        ]
+      },
+      {
+        "id": "set_ac_mode",
+        "title": { "en": "Set mode", "it": "Imposta modalità" },
+        "titleFormatted": { "en": "Set mode to [[mode]]", "it": "Imposta la modalità su [[mode]]" },
+        "args": [
+          { "name": "device", "type": "device", "filter": "driver_id=ac" },
+          {
+            "name": "mode",
+            "type": "dropdown",
+            "values": [
+              { "id": "cool", "title": { "en": "Cool", "it": "Raffreddamento" } },
+              { "id": "heat", "title": { "en": "Heat", "it": "Riscaldamento" } },
+              { "id": "dry", "title": { "en": "Dry", "it": "Deumidificazione" } },
+              { "id": "fan_only", "title": { "en": "Fan only", "it": "Solo ventola" } },
+              { "id": "auto", "title": { "en": "Auto", "it": "Automatico" } }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "set_fan_mode",
+        "title": { "en": "Set fan speed", "it": "Imposta velocità ventola" },
+        "titleFormatted": { "en": "Set fan speed to [[fan]]", "it": "Imposta la velocità ventola su [[fan]]" },
+        "args": [
+          { "name": "device", "type": "device", "filter": "driver_id=ac" },
+          {
+            "name": "fan",
+            "type": "dropdown",
+            "values": [
+              { "id": "auto", "title": { "en": "Auto", "it": "Automatica" } },
+              { "id": "low", "title": { "en": "Low", "it": "Bassa" } },
+              { "id": "mid_low", "title": { "en": "Medium-low", "it": "Medio-bassa" } },
+              { "id": "medium", "title": { "en": "Medium", "it": "Media" } },
+              { "id": "mid_high", "title": { "en": "Medium-high", "it": "Medio-alta" } },
+              { "id": "high", "title": { "en": "High", "it": "Alta" } }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "set_swing",
+        "title": { "en": "Set vertical swing", "it": "Imposta oscillazione verticale" },
+        "titleFormatted": { "en": "Turn vertical swing [[state]]", "it": "Oscillazione verticale [[state]]" },
+        "args": [
+          { "name": "device", "type": "device", "filter": "driver_id=ac" },
+          {
+            "name": "state",
+            "type": "dropdown",
+            "values": [
+              { "id": "on", "title": { "en": "on", "it": "attiva" } },
+              { "id": "off", "title": { "en": "off", "it": "spenta" } }
+            ]
+          }
         ]
       }
     ]

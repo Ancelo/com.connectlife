@@ -40,6 +40,13 @@ class ConnectLifeACDevice extends Homey.Device {
     this.registerCapabilityListener('fan_mode', this._onCapabilityFanMode.bind(this));
     this.registerCapabilityListener('swing_vertical', this._onCapabilitySwing.bind(this));
 
+    this._flowTriggers = {
+      acMode: this.homey.flow.getDeviceTriggerCard('ac_mode_changed'),
+      fanMode: this.homey.flow.getDeviceTriggerCard('fan_mode_changed'),
+      swingOn: this.homey.flow.getDeviceTriggerCard('swing_turned_on'),
+      swingOff: this.homey.flow.getDeviceTriggerCard('swing_turned_off'),
+    };
+
     try {
       await this.refreshStatus();
     } catch (err) {
@@ -91,9 +98,16 @@ class ConnectLifeACDevice extends Homey.Device {
       const n = Number(v);
       return Number.isNaN(n) ? undefined : n;
     };
+    // Track which capabilities actually changed (with their previous value) so
+    // we can fire the matching Flow triggers.
+    const changed = {};
     const set = async (cap, value) => {
       if (value === undefined) return;
-      if (this.getCapabilityValue(cap) !== value) await this.setCapabilityValue(cap, value).catch(this.error);
+      const old = this.getCapabilityValue(cap);
+      if (old !== value) {
+        await this.setCapabilityValue(cap, value).catch(this.error);
+        changed[cap] = { old, value };
+      }
     };
 
     await set('measure_temperature', num(PROP.INDOOR_TEMP));
@@ -110,6 +124,24 @@ class ConnectLifeACDevice extends Homey.Device {
 
     const swing = num(PROP.SWING_UD);
     if (swing !== undefined) await set('swing_vertical', swing !== 0);
+
+    this._fireTriggers(changed);
+  }
+
+  // Fire Flow triggers for changed custom capabilities. The `old != null` guard
+  // skips the initial population (when a capability had no previous value).
+  _fireTriggers(changed) {
+    if (!this._flowTriggers) return;
+    if (changed.ac_mode && changed.ac_mode.old != null) {
+      this._flowTriggers.acMode.trigger(this, { mode: changed.ac_mode.value }).catch(this.error);
+    }
+    if (changed.fan_mode && changed.fan_mode.old != null) {
+      this._flowTriggers.fanMode.trigger(this, { fan_speed: changed.fan_mode.value }).catch(this.error);
+    }
+    if (changed.swing_vertical && changed.swing_vertical.old != null) {
+      const card = changed.swing_vertical.value ? this._flowTriggers.swingOn : this._flowTriggers.swingOff;
+      card.trigger(this, {}).catch(this.error);
+    }
   }
 
   async _update(properties) {

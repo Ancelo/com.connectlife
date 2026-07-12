@@ -1,6 +1,6 @@
 {
   "0.1.0": {
-    "en": "Initial release. Control ConnectLife air conditioners (Hisense, Gorenje, ASKO, ATAG, ETNA): on/off, target temperature, mode (cool/heat/dry/fan/auto), fan speed and vertical swing.",
-    "it": "Prima versione. Controlla i climatizzatori ConnectLife (Hisense, Gorenje, ASKO, ATAG, ETNA): on/off, temperatura, modalità (raffreddamento/riscaldamento/deumidificazione/ventola/auto), velocità ventola e oscillazione verticale."
+    "en": "Initial release. Control ConnectLife air conditioners (Hisense, Gorenje, ASKO, ATAG, ETNA): on/off, target temperature, mode (cool/heat/dry/fan/auto), fan speed and vertical swing. Includes Flow cards (triggers, conditions and actions) for mode, fan speed and swing.",
+    "it": "Prima versione. Controlla i climatizzatori ConnectLife (Hisense, Gorenje, ASKO, ATAG, ETNA): on/off, temperatura, modalità (raffreddamento/riscaldamento/deumidificazione/ventola/auto), velocità ventola e oscillazione verticale. Include Flow card (trigger, condizioni e azioni) per modalità, velocità ventola e oscillazione."
   }
 }
